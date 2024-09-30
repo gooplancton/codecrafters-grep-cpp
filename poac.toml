@@ -1,0 +1,5 @@
+[package]
+name = "codecrafters-grep-cpp"
+version = "0.1.0"
+authors = ["gooplancton <gooplancton@outlook.com>"]
+edition = "20"
