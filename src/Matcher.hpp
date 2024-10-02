@@ -62,13 +62,12 @@ private:
   int match_once(const std::string &input_line, int from_offset);
 
 public:
-  Matcher(const Matcher &) = default;
+  Matcher(const Matcher &) = delete ;
   Matcher(Matcher &&) = default;
-  Matcher &operator=(const Matcher &) = default;
+  Matcher &operator=(const Matcher &) = delete;
   Matcher &operator=(Matcher &&) = default;
-  Matcher(const CharacterClass &character_class, const Quantifier &quantifier)
-      : character_class(std::move(character_class)),
-        quantifier(std::move(quantifier)){};
+  Matcher(CharacterClass &&character_class, Quantifier quantifier)
+      : character_class(character_class), quantifier(quantifier){};
 
   void match(const std::string &input_line, std::stack<MatchState> &states);
 };

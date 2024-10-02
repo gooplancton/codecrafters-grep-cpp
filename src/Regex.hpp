@@ -2,9 +2,15 @@
 #define REGEX_H
 
 #include "Matcher.hpp"
+#include <optional>
 #include <stack>
 #include <string>
 #include <vector>
+
+struct RegexMatch {
+  int start;
+  int end;
+};
 
 class Regex {
 private:
@@ -14,7 +20,7 @@ private:
 public:
   Regex(const std::string &pattern_string);
 
-  bool test(const std::string &input_line);
+  std::optional<RegexMatch> test(const std::string &input_line);
 };
 
 #endif // REGEX_H

@@ -14,10 +14,10 @@ CharacterClass Pattern::parse_escape_seq() {
     return Alphanumeric();
   case '\\':
     idx += 1;
-    return LiteralCharacter('\\');
+    return LiteralCharacter{ .character = '\\' };
   case '.':
     idx += 1;
-    return LiteralCharacter('.');
+    return LiteralCharacter{ .character = '.' };
   default:
     throw "Unexpected escape sequence";
   }
@@ -32,7 +32,7 @@ CharacterClass Pattern::parse_character_group() {
   if (is_positive) {
     int len = closing_bracket_idx - idx - 1;
     const auto characters = &pattern_string.at(idx + 1);
-    auto matcher = PositiveCharacterGroup(characters, len);
+    auto matcher = PositiveCharacterGroup{.characters = characters, .len = len};
 
     idx = closing_bracket_idx + 1;
     return matcher;
@@ -40,7 +40,7 @@ CharacterClass Pattern::parse_character_group() {
 
   int len = closing_bracket_idx - idx - 2;
   const auto characters = &pattern_string.at(idx + 2);
-  auto matcher = NegativeCharacterGroup(characters, len);
+  auto matcher = NegativeCharacterGroup{.characters = characters, .len = len};
 
   idx = closing_bracket_idx + 1;
   return matcher;
@@ -69,7 +69,7 @@ CharacterClass Pattern::next_character_class() {
 
   default:
     idx += 1;
-    return LiteralCharacter(character);
+    return LiteralCharacter{ .character = character };
   }
 }
 
@@ -79,7 +79,7 @@ std::optional<Matcher> Pattern::next_matcher() {
 
   auto character_class = next_character_class();
   if (idx >= pattern_string.length())
-    return Matcher(character_class, Quantifier::ExactlyOne);
+    return Matcher(std::move(character_class), Quantifier::ExactlyOne);
 
   char quantifier_char = pattern_string.at(idx);
 
@@ -97,5 +97,5 @@ std::optional<Matcher> Pattern::next_matcher() {
     quantifier = Quantifier::ExactlyOne;
   }
 
-  return Matcher(character_class, quantifier);
+  return Matcher(std::move(character_class), quantifier);
 }

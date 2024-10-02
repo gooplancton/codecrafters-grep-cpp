@@ -15,7 +15,7 @@ private:
   CharacterClass next_character_class();
 
 public:
-  Pattern(const std::string &pattern_string) : pattern_string(pattern_string){};
+  Pattern(const std::string &pattern_string) : pattern_string(pattern_string), idx(0){};
 
   std::optional<Matcher> next_matcher();
 };

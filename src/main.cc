@@ -1,4 +1,5 @@
 #include "Regex.hpp"
+#include <cstdio>
 #include <iostream>
 #include <string>
 
@@ -25,9 +26,16 @@ int main(int argc, char *argv[]) {
 
   try {
     auto regex = Regex(pattern);
-    if (regex.test(input_line)) {
+    auto match = regex.test(input_line);
+    if (match) {
+      int match_len = match->end - match->start;
+      auto matched_substr = input_line.substr(match->start, match_len);
+      printf("matched substring: %s\n", matched_substr.c_str());
+
       return 0;
     } else {
+
+      printf("no match\n");
       return 1;
     }
   } catch (const std::runtime_error &e) {
@@ -35,3 +43,4 @@ int main(int argc, char *argv[]) {
     return 1;
   }
 }
+
