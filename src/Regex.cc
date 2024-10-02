@@ -13,7 +13,7 @@ Regex::Regex(const std::string &pattern_string)
   while (true) {
     auto matcher = pattern.next_matcher();
     if (matcher)
-      matchers.push_back(*matcher);
+      matchers.push_back(std::move(*matcher));
     else
       break;
   }
@@ -31,8 +31,8 @@ std::optional<RegexMatch> Regex::test(const std::string &input_line) {
       if (state.matcher_idx == matchers.size())
         return RegexMatch{.start = start, .end = state.line_offset};
 
-      auto matcher = matchers.at(state.matcher_idx);
-      matcher.match(input_line, states);
+      auto matcher = &matchers.at(state.matcher_idx);
+      matcher->match(input_line, states);
     }
   }
 
